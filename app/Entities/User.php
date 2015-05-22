@@ -1,4 +1,4 @@
-<?php namespace App;
+<?php namespace App\Entities;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +9,8 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
 	use Authenticatable, CanResetPassword;
-
+        
+         protected $connection = 'mysql';
 	/**
 	 * The database table used by the model.
 	 *

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTicketVotesTable extends Migration {
+class CreateTicketCommentsTable extends Migration {
 
 	/**
 	 * Run the migrations.
@@ -12,9 +12,11 @@ class CreateTicketVotesTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::connection('mysql')->create('ticket_votes', function(Blueprint $table)
+		Schema::connection('mysql')->create('ticket_comments', function(Blueprint $table)
 		{
 			$table->increments('id');
+                        $table->string('comment');
+			$table->string('link')->nullable();
 			$table->integer('user_id')->unsigned();
                         $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 			$table->integer('ticket_id')->unsigned();
@@ -30,7 +32,7 @@ class CreateTicketVotesTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::connection('mysql')->drop('ticket_votes');
+		Schema::connection('mysql')->drop('ticket_comments');
 	}
 
 }
