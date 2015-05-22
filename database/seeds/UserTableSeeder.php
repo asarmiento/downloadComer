@@ -16,35 +16,36 @@ use Faker\Generator;
  * @author Anwar Sarmiento
  */
 class UserTableSeeder extends BaseSeeder {
-    
+
+ 
     public function getModel() {
         return new User();
     }
-    public function getDummyData(Generator $faker,array $customValues = array()) {
-       return [
-            'name'=>$faker->name,
-            'email'=>$faker->email,
-            'password'=>bcrypt('admin')
+
+    public function getDummyData(Generator $faker, array $customValues = array()) {
+        return [
+            'name' => $faker->name,
+            'email' => $faker->email,
+            'password' => bcrypt('admin')
         ];
     }
 
     //put your code here
-    public function run(){
-        
-     
-        
+    public function run() {
+
+
+
         $this->createAdmin();
-        
+
         $this->createMultiple(50);
     }
-    
-    private function createAdmin(){
+
+    private function createAdmin() {
         User::create([
-            'name'=>'Anwar Sarmiento',
-            'email'=>'anwarsarmiento@gmail.com',
-            'password'=>bcrypt('admin')
+            'name' => 'Anwar Sarmiento',
+            'email' => 'anwarsarmiento@gmail.com',
+            'password' => bcrypt('admin')
         ]);
     }
-    
-  
+
 }

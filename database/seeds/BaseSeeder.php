@@ -9,6 +9,7 @@
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 use Faker\Generator;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Description of BaseSeeder
@@ -18,6 +19,12 @@ use Faker\Generator;
 abstract class BaseSeeder extends Seeder {
 
     protected static $pool;
+    protected $total = 50;
+
+    public function run() {
+        $this->createMultiple($this->total);
+    }
+
     //put your code here
     protected function createMultiple($total) {
 
@@ -29,30 +36,52 @@ abstract class BaseSeeder extends Seeder {
     }
 
     abstract public function getModel();
-
+    /** */
     abstract public function getDummyData(Generator $faker, array $customValues = array());
-
+    /**
+     * 
+     * @param array $customValues
+     * @return type
+     */
     protected function create(array $customValues = array()) {
         $values = $this->getDummyData(Faker::create(), $customValues);
         $values = array_merge($values, $customValues);
-       return $this->addToPool($this->getModel()->create($values));
+        return $this->addToPool($this->getModel()->create($values));
     }
-
-    protected function createFrom($seeder,array $customValues = array() ){
-        $seeder= new $seeder;
+    /**
+     * 
+     * @param seeder $seeder
+     * @param array $customValues
+     * @return type
+     */
+    protected function createFrom($seeder, array $customValues = array()) {
+        $seeder = new $seeder;
         return $seeder->create($customValues);
     }
-    
-    protected function getRandom($model){
+    /**
+     * 
+     * @param type $model
+     * @return type
+     */
+    protected function getRandom($model) {
         return static::$pool[$model]->random();
     }
-    private function addToPool($entity){
-        $class = get_class($entity);
+    /**
+     * 
+     * @param type $entity
+     */
+    private function addToPool($entity) {
         
-        if(!isset(static::$pool[$class] )):
-            static::$pool[$class]= new Collection();
+        $reflection = new ReflectionClass($entity);
+        $class = $reflection->getShortName();
+
+        if (!$this->collectionExist($class)):
+            static::$pool[$class] = new Collection();
         endif;
-        
+
         static::$pool[$class]->add($entity);
+    }
+    private function collectionExist($class){
+        return isset(static::$pool[$class]);
     }
 }
